@@ -20,7 +20,7 @@ jobs:
 
       - name: "🔧 install according to package-lock"
         run: npm ci
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: restore-build
         with:
           path: ./*
@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: lts/Hydrogen
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: restore-build
         with:
           path: ./*
@@ -63,7 +63,7 @@ jobs:
         with:
           node-version: lts/Hydrogen
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: restore-build
         with:
           path: ./*
@@ -86,7 +86,7 @@ jobs:
         with:
           node-version: lts/Hydrogen
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: restore-build
         with:
           path: ./*
