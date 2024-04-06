@@ -1,5 +1,6 @@
 {
   "name": "reacttemplate",
+  "type": "module",
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite",
