@@ -12,10 +12,8 @@ export default defineConfig({
     }
   },
   test: {
-    environment: 'jsdom',
+    environment: 'happy-dom',
     globals: true,
     setupFiles: './tests/vitest.setup.ts',
   },
 });
-
-// NEXT: GITHUB ACTIONS !!!
