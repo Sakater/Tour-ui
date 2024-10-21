@@ -1,15 +1,12 @@
 import React, {ChangeEvent, useState} from "react";
-import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from 'react-leaflet'
+import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet'
 import {Location} from "./Types";
 import axios from 'axios';
 import Box from '@mui/material/Box';
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
-import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import {DeleteForever} from "@mui/icons-material";
-import {LatLng} from "leaflet";
+import {Results} from "./Results";
 
 
 export const App = () => {
@@ -141,6 +138,7 @@ export const App = () => {
                     {/*<input type="submit" value="Submit"/>*/}
 
                 </form>
+                <Results locations={locations}/>
             </div>
             <div className={"grid-item"} style={{padding: "2%"}}>
                 <MapContainer style={{height: "100%", width: "100%"}}
