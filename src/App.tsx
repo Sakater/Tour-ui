@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useState} from "react";
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet'
-import {Location} from "./Types";
+import {Location, Result} from "./Types";
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -14,32 +14,56 @@ export const App = () => {
     const handleModalOpen = () => setModalOpen(true);
     const handleModalClose = () => setModalOpen(false);
     const [data, setData] = useState([]);
+    const [locations, setLocations] = useState<Location[]>([])
+    const [inputValues, setInputValues] = useState<any>([])
+    const [showResults, setShowResults] = useState(false)
+    const [results, setResults] = useState<Result>();
 
-    const initLocations = {
-        locations: [
-            {
-                name: '',
-                lat: 0,
-                lon: 0
-            }
-        ]
+    const postResults = async () => {
+        setShowResults(false)
+        return axios.post('http://127.0.0.1:8000/nodes', locations)
+            .then(response => {
+                setResults(() => {
+                    return response.data
+                });
+            })
+            .then(() => setShowResults(true))
+            .catch(error => {
+                console.error(error);
+            });
     }
-    const [locations, setLocations] = useState<Location[]>(initLocations.locations)
 
     function addLocation() {
         const newLocation: Location = {
-            name: '',
+            display_name: '',
             lat: 0,
-            lon: 0,
+            lon: 0
         };
 
         setLocations(prevData => [
             ...prevData, newLocation
         ]);
+        setInputValues(prevData => [
+            ...prevData, ''
+        ]);
+    }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+        setInputValues(prevData => {
+            return prevData.map((prevLocation, mapIndex) => {
+                if (mapIndex === index) {
+                    return e.target.value
+                }
+                return prevLocation
+            })
+        })
     }
 
     const deleteLocation = (index) => {
         setLocations(prevData => {
+            return prevData.filter((_, mapIndex) => mapIndex !== index)
+        })
+        setInputValues(prevData => {
             return prevData.filter((_, mapIndex) => mapIndex !== index)
         })
     }
@@ -55,27 +79,13 @@ export const App = () => {
             });
     }
 
-    function handleChange({target: {name, value}}: ChangeEvent<HTMLInputElement>, index: number) {
-        setLocations(prevData => {
-            return prevData.map((prevLocation, mapIndex) => {
-                if (mapIndex === index) {
-                    return {
-                        ...prevLocation,
-                        name: value
-                    }
-                }
-                return prevLocation
-            })
-        })
-    }
-
     const choose = (location, index) => {
         setLocations(prevData => {
             return prevData.map((prevLocation, mapIndex) => {
                 if (mapIndex === index) {
                     return {
                         ...prevLocation,
-                        name: location.display_name,
+                        display_name: location.display_name,
                         lat: location.lat,
                         lon: location.lon
                     }
@@ -83,9 +93,16 @@ export const App = () => {
                 return prevLocation
             })
         })
+        setInputValues(prevData => {
+            return prevData.map((prevLocation, mapIndex) => {
+                if (mapIndex === index) {
+                    return location.display_name
+                }
+                return prevLocation
+            })
+        })
         handleModalClose()
     }
-
 
     return (
         <div className={"grid-container"}>
@@ -95,12 +112,12 @@ export const App = () => {
                         {locations.map((location, index) => (
                             <label className={"labels"}>
                                 {index + 1}. Standort
-                                <input type="text" name={"Standort-" + (index + 1)} value={location.name}
+                                <input type="text" name={"Standort-" + (index + 1)} value={inputValues[index]}
                                        onChange={(e) => handleChange(e, index)}
                                        onKeyDown={(e) => {
                                            if (e.key === "Enter") {
                                                e.preventDefault()
-                                               searchForLocation(location.name, index)
+                                               searchForLocation(e.currentTarget.value, index)
                                                handleModalOpen()
                                            }
                                        }}
@@ -109,8 +126,7 @@ export const App = () => {
                                     open={modalOpen}
                                     onClose={handleModalClose}
                                     aria-labelledby="modal-modal-title"
-                                    aria-describedby="modal-modal-description"
-                                >
+                                    aria-describedby="modal-modal-description">
                                     <Box className={"modal"}>
                                         <Typography id="modal-modal-title" variant="h6" component="h2">
                                             Gefundene Standorte
@@ -135,10 +151,12 @@ export const App = () => {
                         ))}
                     </div>
                     <button type={"button"} onClick={addLocation}>Add Location</button>
-                    {/*<input type="submit" value="Submit"/>*/}
+                    <button type={"button"} onClick={postResults}>Calculate</button>
 
                 </form>
-                <Results locations={locations}/>
+                <div>
+                    {showResults && <Results results={results as Result}/>}
+                </div>
             </div>
             <div className={"grid-item"} style={{padding: "2%"}}>
                 <MapContainer style={{height: "100%", width: "100%"}}
@@ -152,7 +170,7 @@ export const App = () => {
                         location.lat !== 0 &&
                         <Marker key={index} position={[location.lat, location.lon]}>
                             <Popup>
-                                {location.name}
+                                {location.display_name}
                             </Popup>
                         </Marker>))}
 
