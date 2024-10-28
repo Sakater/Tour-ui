@@ -1,11 +1,34 @@
-import React from 'react';
-import {Result} from "./Types";
+import React, {useEffect, useState} from 'react';
+import {Result, Edge} from "./Types";
 
 export interface ResultsProps {
     results: Result;
+    onUpdate: (processedResults: { lat: number; lon: number }[]) => void;
 }
 
-export const Results = ({results}: ResultsProps) => {
+export const Results = ({results, onUpdate}: ResultsProps) => {
+    const [processedResults, setProcessedResults] = useState<[{ lat: number; lon: number; }]>([]);
+
+    useEffect(() => {
+        processResults();
+    }, [results]);
+    const processResults = () => {
+        const processedResults: { 'lat': number, 'lon': number }[] = []
+        results.distances.map((distances, outerIndex) => {
+            return distances.map((distance, innerIndex) => {
+                const routes: number = results.routes[0][outerIndex];
+                const target: number = results.routes[0][outerIndex + 1];
+                if (distance === results.distances[routes][target]) {
+                    processedResults.push({
+                        'lat': distance.originNode.lat,
+                        'lon': distance.originNode.lon
+                    });
+                }
+            });
+        })
+        onUpdate(processedResults);
+    }
+
     return (
         <div>
             <table>
@@ -23,7 +46,7 @@ export const Results = ({results}: ResultsProps) => {
                         return distances.map((distance, innerIndex) => {
                             const routes: number = results.routes[0][outerIndex];
                             const target: number = results.routes[0][outerIndex + 1];
-                            if (distance.distance === results.distances[routes][target].distance) {
+                            if (distance === results.distances[routes][target]) {
                                 return (
                                     <tr key={`${outerIndex}-${innerIndex}`} style={{fontSize: "15px"}}>
                                         <td>{distance.originNode.display_name}</td>

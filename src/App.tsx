@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
-import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet'
+import {MapContainer, Marker, Polyline, Popup, TileLayer} from 'react-leaflet'
 import {Location, Result} from "./Types";
 import axios from 'axios';
 import Box from '@mui/material/Box';
@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import {DeleteForever} from "@mui/icons-material";
 import {Results} from "./Results";
+import polyline from '@mapbox/polyline';
 
 
 export const App = () => {
@@ -18,6 +19,9 @@ export const App = () => {
     const [inputValues, setInputValues] = useState<any>([])
     const [showResults, setShowResults] = useState(false)
     const [results, setResults] = useState<Result>();
+    const [routes, setRoutes] = useState<{ lat: number, lon: number }[]>([])
+    const [orderedLocations, setOrderedLocations] = useState([])
+    const [showPolyline, setShowPolyline] = useState(false)
 
     const postResults = async () => {
         setShowResults(false)
@@ -27,10 +31,57 @@ export const App = () => {
                     return response.data
                 });
             })
-            .then(() => setShowResults(true))
+            .then(async () => {
+                setShowResults(true)
+                await fetchRoutes()
+            })
             .catch(error => {
                 console.error(error);
             });
+    }
+    const decodeShape = (encodedShape) => {
+        return polyline.decode(encodedShape);
+    };
+    const fetchRoutes = async () => {
+        if (results === undefined) {
+            return
+        }
+        console.log("Ordered Locations:", orderedLocations); // Log orderedLocations to check its content
+
+        if (orderedLocations.length === 0) {
+            console.error("Ordered locations are empty.");
+            return;
+        }
+        const json = JSON.stringify({
+            "locations": orderedLocations,
+            'costing': 'auto',
+            "directions_options": {"units": "kilometers"}
+        })
+
+        return axios.post('https://valhalla1.openstreetmap.de/route?json=' + json)
+            .then(response => {
+                const data = response.data
+                const legs = decodeShape(data.trip.legs[0].shape)
+                const  routes = legs.map((leg) => {
+                    return {
+                        lat: leg[0],
+                        lon: leg[1]
+                    }
+                })
+                console.log(routes)
+                console.log(showPolyline)
+                setRoutes(() => {
+                    return routes
+                });
+            })
+            .then(() => setShowPolyline(true))
+            .then(() => console.log(showPolyline))
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    const updateRoutes = (edge: { lat: number, lon: number }[]) => {
+        setOrderedLocations(edge)
     }
 
     function addLocation() {
@@ -155,17 +206,19 @@ export const App = () => {
 
                 </form>
                 <div>
-                    {showResults && <Results results={results as Result}/>}
+                    {showResults && <Results results={results as Result} onUpdate={updateRoutes}/>}
                 </div>
             </div>
             <div className={"grid-item"} style={{padding: "2%"}}>
                 <MapContainer style={{height: "100%", width: "100%"}}
                               zoomAnimation={true} center={[52.510942, 13.399040]}
-                              zoom={15} scrollWheelZoom={true}>
+                              zoom={10} scrollWheelZoom={true}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+                    {showPolyline && routes > 1 && <Polyline color='blue' positions={routes}/>}
+
                     {locations.map((location, index) => (
                         location.lat !== 0 &&
                         <Marker key={index} position={[location.lat, location.lon]}>

@@ -15,3 +15,10 @@ export type Result = {
     ]],
     routes: [[]]
 }
+
+export type Edge = {
+    distance: number;
+    originNode: Location;
+    targetNode: Location;
+    time: number;
+}
