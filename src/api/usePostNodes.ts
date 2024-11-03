@@ -37,6 +37,12 @@ export const usePostNodes = ({
 					`An error occurred during call of following url: ${url}`,
 				);
 			}
+
+			/*
+			 * use this as mock, when local backend is not available	
+			return new Promise<Node>((resolver) =>
+				setTimeout(() => resolver(nodes as Node), 1000),
+			);*/
 		},
 		enabled,
 	});

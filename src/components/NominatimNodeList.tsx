@@ -7,10 +7,10 @@ import {
 	ListItemText,
 	Typography,
 } from "@mui/material";
-import type { NomatimLocation } from "./api/useGetLocations";
+import type { NomatimLocation } from "../api/useGetLocations";
 import { useContext } from "react";
-import { LocationContext } from "./LocationContext";
-import type { LocationContextType } from "./LocationContext";
+import { LocationContext } from "../util/LocationContext";
+import type { LocationContextType } from "../util/LocationContext";
 
 type NominatimNodeListProps = {
 	locations: NomatimLocation[];

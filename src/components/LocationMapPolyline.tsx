@@ -19,8 +19,11 @@ const getRouteFromValhallaResponse = (
 		return undefined;
 	}
 
-	const decodedShape = decodeShape(valhallaResponse.trip.legs[0].shape);
-	return decodedShape.map((leg) => ({
+	const decodedShapes = valhallaResponse.trip.legs.flatMap((leg) =>
+		decodeShape(leg.shape),
+	);
+
+	return decodedShapes.map((leg) => ({
 		lat: leg[0],
 		lng: leg[1],
 	}));
