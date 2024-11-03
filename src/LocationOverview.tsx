@@ -2,6 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { LocationList } from "./LocationList";
 import { useState } from "react";
 import { LocationModal } from "./LocationModal";
+import { EdgesResults } from "./EdgesResults";
 
 export const LocationOverview = () => {
 	const [locationModalOpen, setLocationModalOpen] = useState(false);
@@ -16,6 +17,8 @@ export const LocationOverview = () => {
 					display: "flex",
 					flexDirection: "column",
 					gap: "8px",
+					backgroundColor: "rgb(248, 249, 254)",
+					padding: 2,
 				}}
 			>
 				<Typography variant="h4" mb="16px" textAlign="center">
@@ -35,20 +38,7 @@ export const LocationOverview = () => {
 					</Typography>
 				</Button>
 				<LocationList />
-				<Box
-					sx={{ marginTop: "8px", display: "flex", justifyContent: "center" }}
-				>
-					<Button
-						variant="contained"
-						size="small"
-						style={{ textTransform: "none", width: "150px" }}
-						color="secondary"
-					>
-						<Typography variant="body2" component="span">
-							Routen berechnen
-						</Typography>
-					</Button>
-				</Box>
+				<EdgesResults />
 			</Box>
 			<LocationModal
 				open={locationModalOpen}

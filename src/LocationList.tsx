@@ -64,7 +64,6 @@ export const LocationList = () => {
 	return (
 		<Box
 			sx={{
-				width: "100%",
 				padding: "8px",
 				backgroundColor: "rgb(236, 237, 245)",
 			}}

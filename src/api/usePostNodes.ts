@@ -1,10 +1,11 @@
-import { baseURL } from "../shared/constants";
-import { usePostQuery } from "./usePostQuery";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import type { Location } from "../LocationContext";
+import nodes from "../../nodes.json";
 
-export type Location = {
-	lat: number;
-	lon: number;
-	display_name: string;
+type UsePostNodesParameters = {
+	locations: Location[];
+	enabled: boolean;
 };
 
 type Edge = {
@@ -16,8 +17,27 @@ type Edge = {
 
 export type Node = {
 	distances: Array<Array<Edge>>;
-	routes: Array<Array<number>>;
+	routes: number[][];
 };
 
-export const usePostNodes = (locations: Location[]) =>
-	usePostQuery<Node>(`${baseURL}/nodes`, locations);
+export const usePostNodes = ({
+	locations,
+	enabled,
+}: UsePostNodesParameters) => {
+	const url = "http://127.0.0.1:8000/nodes";
+
+	return useQuery({
+		queryKey: ["nodes"],
+		queryFn: async () => {
+			try {
+				const { data } = await axios.post<Node>(url, locations);
+				return data;
+			} catch (error) {
+				throw new Error(
+					`An error occurred during call of following url: ${url}`,
+				);
+			}
+		},
+		enabled,
+	});
+};

@@ -1,14 +1,8 @@
 import { useContext, useEffect } from "react";
-import {
-	MapContainer,
-	Marker,
-	Polyline,
-	Popup,
-	TileLayer,
-	useMap,
-} from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { LocationContext } from "./LocationContext";
 import type { LocationContextType } from "./LocationContext";
+import { LocationMapPolyline } from "./LocationMapPolyline";
 
 const LocationMarkers = () => {
 	const { locations } = useContext(LocationContext) as LocationContextType;
@@ -41,7 +35,6 @@ const LocationMarkers = () => {
 export const LocationMap = () => {
 	return (
 		<MapContainer
-			style={{ height: "100%", width: "100%" }}
 			zoomAnimation={true}
 			center={[52.510942, 13.39904]}
 			zoom={10}
@@ -52,6 +45,7 @@ export const LocationMap = () => {
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 			/>
 			<LocationMarkers />
+			<LocationMapPolyline />
 		</MapContainer>
 	);
 };

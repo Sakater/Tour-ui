@@ -2,28 +2,24 @@ import { Box } from "@mui/material";
 import { LocationOverview } from "./LocationOverview";
 import { LocationProvider } from "./LocationContext";
 import { LocationMap } from "./LocationMap";
+import { NodeProvider } from "./NodeContext";
 
 export const App = () => {
 	return (
 		<LocationProvider>
-			<Box
-				sx={{
-					display: "grid",
-					gridAutoFlow: "column",
-					gridAutoColumns: "1fr",
-					height: "100%",
-				}}
-			>
+			<NodeProvider>
 				<Box
 					sx={{
-						backgroundColor: "rgb(248, 249, 254)",
-						padding: "64px",
+						display: "grid",
+						gridAutoFlow: "column",
+						gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+						height: "100%",
 					}}
 				>
 					<LocationOverview />
+					<LocationMap />
 				</Box>
-				<LocationMap />
-			</Box>
+			</NodeProvider>
 		</LocationProvider>
 	);
 };

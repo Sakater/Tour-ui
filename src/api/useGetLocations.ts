@@ -42,8 +42,7 @@ export const useGetLocations = ({
 		queryKey: ["locations"],
 		queryFn: async (): Promise<NomatimLocation[]> => {
 			try {
-				const response = await axios.get<NomatimLocation[]>(url);
-				const data = await response.data;
+				const { data } = await axios.get<NomatimLocation[]>(url);
 				return data;
 			} catch (error) {
 				throw new Error(
