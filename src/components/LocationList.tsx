@@ -7,8 +7,8 @@ import {
 	Typography,
 } from "@mui/material";
 import { useContext } from "react";
-import { LocationContext } from "./LocationContext";
-import type { LocationContextType } from "./LocationContext";
+import { LocationContext } from "../util/LocationContext";
+import type { LocationContextType } from "../util/LocationContext";
 import { Delete } from "@mui/icons-material";
 
 export const LocationList = () => {

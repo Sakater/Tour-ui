@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import type { PropsWithChildren } from "react";
-import type { Node } from "./api/usePostNodes";
+import type { Node } from "../api/usePostNodes";
 
 export type NodeContextType = {
 	node: Node | undefined;

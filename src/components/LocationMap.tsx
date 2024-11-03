@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import { LocationContext } from "./LocationContext";
-import type { LocationContextType } from "./LocationContext";
+import { LocationContext } from "../util/LocationContext";
+import type { LocationContextType } from "../util/LocationContext";
 import { LocationMapPolyline } from "./LocationMapPolyline";
 
 const LocationMarkers = () => {

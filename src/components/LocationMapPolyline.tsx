@@ -1,9 +1,12 @@
 import { useContext } from "react";
-import { NodeContext, type NodeContextType } from "./NodeContext";
-import { LocationContext, type LocationContextType } from "./LocationContext";
-import { usePostRoutes } from "./api/usePostRoutes";
+import { NodeContext, type NodeContextType } from "../util/NodeContext";
+import {
+	LocationContext,
+	type LocationContextType,
+} from "../util/LocationContext";
+import { usePostRoutes } from "../api/usePostRoutes";
 import { Polyline } from "react-leaflet";
-import { decodeValhallaShape } from "./util/decodeValhallaShape";
+import { decodeValhallaShape } from "../util/decodeValhallaShape";
 
 const decodeShape = (encodedShape: string) => {
 	return decodeValhallaShape(encodedShape);

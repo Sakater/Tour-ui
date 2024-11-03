@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Location } from "../LocationContext";
+import type { Location } from "../util/LocationContext";
 import axios from "axios";
 
 type UsePostRoutesParameters = {

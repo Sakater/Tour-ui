@@ -8,11 +8,11 @@ import {
 } from "@mui/material";
 import { SearchInput } from "./SearchInput";
 import { useContext, useEffect, useState } from "react";
-import { useDebounce } from "./useDebounce";
-import { useGetLocations } from "./api/useGetLocations";
+import { useDebounce } from "../util/useDebounce";
+import { useGetLocations } from "../api/useGetLocations";
 import { NominatimNodeList } from "./NominatimNodeList";
-import { LocationContext } from "./LocationContext";
-import type { LocationContextType } from "./LocationContext";
+import { LocationContext } from "../util/LocationContext";
+import type { LocationContextType } from "../util/LocationContext";
 
 type LocationModalProps = Pick<ModalProps, "open"> & {
 	onClose: () => void;
