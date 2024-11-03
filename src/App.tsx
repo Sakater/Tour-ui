@@ -8,6 +8,7 @@ import Modal from '@mui/material/Modal';
 import {DeleteForever} from "@mui/icons-material";
 import {Results} from "./Results";
 import polyline from '@mapbox/polyline';
+import { LocationsModal } from "./components/LocationsModal";
 
 
 export const App = () => {
@@ -119,7 +120,7 @@ export const App = () => {
         })
     }
     const searchForLocation = async (name: string, index: number) => {
-        return axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=` + name)
+        /*return axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=` + name)
             .then(response => {
                 setData(() => {
                     return response.data
@@ -127,7 +128,7 @@ export const App = () => {
             })
             .catch(error => {
                 console.error(error);
-            });
+            });*/
     }
 
     const choose = (location, index) => {
@@ -173,28 +174,7 @@ export const App = () => {
                                            }
                                        }}
                                 />
-                                <Modal
-                                    open={modalOpen}
-                                    onClose={handleModalClose}
-                                    aria-labelledby="modal-modal-title"
-                                    aria-describedby="modal-modal-description">
-                                    <Box className={"modal"}>
-                                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                                            Gefundene Standorte
-                                        </Typography>
-                                        <Typography id="modal-modal-description" sx={{mt: 2}}>
-                                            {data.map((location: any) => (
-                                                <div className={"modalStandorte dataList"}>
-                                                    <p className={"dataList"} onClick={() => {
-                                                        if (data.length > 0) {
-                                                            choose(location, index)
-                                                        }
-                                                    }}>{location.display_name}</p>
-                                                </div>
-                                            ))}
-                                        </Typography>
-                                    </Box>
-                                </Modal>
+                                <LocationsModal open={modalOpen} onClose={handleModalClose} searchString={inputValues[index]} />
                                 {/*<FlyToButton coordinates={[location.lat, location.lon]} zoom={16}/>*/}
                                 <DeleteForever onClick={() => deleteLocation(index)}/>
                             </label>
