@@ -7,7 +7,7 @@ import {
 	type ModalProps,
 } from "@mui/material";
 import { SearchInput } from "./SearchInput";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useDebounce } from "../util/useDebounce";
 import { useGetLocations } from "../api/useGetLocations";
 import { NominatimNodeList } from "./NominatimNodeList";
@@ -50,7 +50,7 @@ export const LocationModal = ({ onClose, open }: LocationModalProps) => {
 	}, [debouncedValue, refetch]);
 
 	return (
-		<Modal open={open} onClose={onClose}>
+		<Modal open={open} onClose={onClose} disableRestoreFocus>
 			<Box
 				sx={{
 					position: "absolute",

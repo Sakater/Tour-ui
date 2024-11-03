@@ -26,6 +26,7 @@ export const SearchInput = ({
 		<Paper>
 			<Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
 				<Input
+					autoFocus
 					value={searchValue}
 					onChange={handleInputChange}
 					disableUnderline
