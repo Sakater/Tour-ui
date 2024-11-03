@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { LocationOverview } from "./LocationOverview";
 import { LocationProvider } from "./LocationContext";
+import { LocationMap } from "./LocationMap";
 
 export const App = () => {
 	return (
@@ -21,7 +22,7 @@ export const App = () => {
 				>
 					<LocationOverview />
 				</Box>
-				<Box>Karte</Box>
+				<LocationMap />
 			</Box>
 		</LocationProvider>
 	);
