@@ -27,13 +27,10 @@ export const LocationOverview = () => {
 				<Button
 					variant="contained"
 					size="small"
+					onClick={handleShowLocationModal}
 					style={{ textTransform: "none", width: "150px" }}
 				>
-					<Typography
-						variant="body2"
-						component="span"
-						onClick={handleShowLocationModal}
-					>
+					<Typography variant="body2" component="span">
 						Knoten hinzufügen
 					</Typography>
 				</Button>
