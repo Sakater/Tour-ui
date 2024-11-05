@@ -65,7 +65,15 @@ export const usePostRoutes = ({ nodes, enabled }: UsePostRoutesParameters) => {
 	};
 
 	return useQuery({
-		queryKey: ["routes"],
+		queryKey: [
+			"routes",
+			{
+				latConcatenated: nodes.reduce(
+					(accumulator, currentNode) => `${accumulator}${currentNode.lat}`,
+					"",
+				),
+			},
+		],
 		queryFn: async () => {
 			try {
 				const { data } = await axios.post<ValhallaResponse>(url, payload);

@@ -27,7 +27,16 @@ export const usePostNodes = ({
 	const url = "http://127.0.0.1:8000/nodes";
 
 	return useQuery({
-		queryKey: ["nodes"],
+		queryKey: [
+			"nodes",
+			{
+				locationIds: locations.reduce(
+					(accumulator, currentLocation) =>
+						`${accumulator}${currentLocation.id}`,
+					"",
+				),
+			},
+		],
 		queryFn: async () => {
 			try {
 				const { data } = await axios.post<Node>(url, locations);
