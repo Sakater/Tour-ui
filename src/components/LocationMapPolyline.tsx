@@ -49,7 +49,5 @@ export const LocationMapPolyline = () => {
 		return undefined;
 	}
 
-	console.log(route);
-
 	return <Polyline color="blue" positions={route} />;
 };
